@@ -880,45 +880,31 @@
         const chatInput = document.getElementById('chat-input');
         const chatStatusDot = document.getElementById('chat-status-dot');
         const chatStatusText = document.getElementById('chat-status-text');
-        let ws = null;
+        const CHAT_API = 'http://89.248.236.147:8080';
+        let lastTimestamp = 0;
 
-        function connectChat() {
-            // Connect to the chat WebSocket server
-            // Replace with your actual server address
+        async function pollChat() {
             try {
-                ws = new WebSocket('ws://89.248.236.147:8080/chat');
-
-                ws.onopen = () => {
+                const resp = await fetch(`${CHAT_API}/chat?since=${lastTimestamp}`);
+                if (resp.ok) {
+                    const messages = await resp.json();
                     chatStatusDot.classList.add('connected');
                     chatStatusText.textContent = 'Подключено';
-                    addChatMessage('Система', 'Подключено к чату сервера', 'system');
-                };
-
-                ws.onmessage = (event) => {
-                    try {
-                        const data = JSON.parse(event.data);
-                        addChatMessage(data.author, data.message, data.source || 'minecraft');
-                    } catch(e) {
-                        addChatMessage('Сервер', event.data, 'minecraft');
-                    }
-                };
-
-                ws.onclose = () => {
-                    chatStatusDot.classList.remove('connected');
-                    chatStatusText.textContent = 'Отключено';
-                    setTimeout(connectChat, 5000);
-                };
-
-                ws.onerror = () => {
-                    chatStatusDot.classList.remove('connected');
-                    chatStatusText.textContent = 'Ошибка';
-                };
+                    messages.forEach(msg => {
+                        try {
+                            const data = JSON.parse(msg);
+                            addChatMessage(data.author, data.message, data.source || 'minecraft');
+                            if (data.timestamp > lastTimestamp) lastTimestamp = data.timestamp;
+                        } catch(e) {}
+                    });
+                }
             } catch(e) {
+                chatStatusDot.classList.remove('connected');
                 chatStatusText.textContent = 'Нет соединения';
-                setTimeout(connectChat, 10000);
             }
+            setTimeout(pollChat, 3000);
         }
-        connectChat();
+        pollChat();
 
         function addChatMessage(author, message, source) {
             const div = document.createElement('div');
@@ -931,19 +917,22 @@
             if (chatMessages.children.length > 200) chatMessages.removeChild(chatMessages.firstChild);
         }
 
-        function sendChatMessage() {
+        async function sendChatMessage() {
             const val = chatInput.value.trim();
             if (!val) return;
-            // Format: "nickname: message"
             const parts = val.split(':');
             let author = 'Игрок', message = val;
             if (parts.length >= 2) {
                 author = parts[0].trim();
                 message = parts.slice(1).join(':').trim();
             }
-            if (ws && ws.readyState === WebSocket.OPEN) {
-                ws.send(JSON.stringify({ author, message, source: 'web' }));
-            }
+            try {
+                await fetch(`${CHAT_API}/chat/send`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ author, message })
+                });
+            } catch(e) {}
             addChatMessage(author, message, 'web');
             chatInput.value = '';
         }

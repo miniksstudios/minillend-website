@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MinilLend — Minecraft Launcher & Server</title>
+    <meta name="description" content="MinilLend — кастомный Minecraft лаунчер для сборки All of Create Aeronautics v2.2">
+    <link rel="icon" href="https://i.ibb.co/LXNzzVGq/Chat-GPT-Image-8-2026-01-44-16.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ===== CSS Variables & Themes ===== */
+        :root {
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0A0A1A;
+            --bg-secondary: #111128;
+            --bg-card: #141428CC;
+            --bg-card-solid: #141428;
+            --bg-input: #1A1A30;
+            --border: #2D2D55;
+            --text-primary: #FFFFFF;
+            --text-secondary: #8888AA;
+            --text-muted: #555577;
+            --accent-1: #9B59B6;
+            --accent-2: #E74C8B;
+            --accent-3: #4FC3F7;
+            --accent-gradient: linear-gradient(135deg, #9B59B6, #E74C8B, #4FC3F7);
+            --accent-gradient-h: linear-gradient(90deg, #9B59B6, #E74C8B);
+            --glow: rgba(155, 89, 182, 0.3);
+            --shadow: rgba(0,0,0,0.4);
+            --success: #66BB6A;
+            --error: #EF5350;
+            --twitch: #9146FF;
+            --discord: #5865F2;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #F5F0FF;
+            --bg-secondary: #FFFFFF;
+            --bg-card: #FFFFFFCC;
+            --bg-card-solid: #FFFFFF;
+            --bg-input: #F0ECFF;
+            --border: #D0C8E8;
+            --text-primary: #1A1A2E;
+            --text-secondary: #666688;
+            --text-muted: #9999BB;
+            --accent-1: #8E44AD;
+            --accent-2: #D63384;
+            --accent-3: #0DCAF0;
+            --accent-gradient: linear-gradient(135deg, #8E44AD, #D63384, #0DCAF0);
+            --accent-gradient-h: linear-gradient(90deg, #8E44AD, #D63384);
+            --glow: rgba(142, 68, 173, 0.2);
+            --shadow: rgba(0,0,0,0.1);
+            --success: #198754;
+            --error: #DC3545;
+            --twitch: #7B2FFF;
+            --discord: #4752C4;
+        }
+
+        [data-theme="midnight"] {
+            --bg-primary: #000000;
+            --bg-secondary: #060610;
+            --bg-card: #0A0A18CC;
+            --bg-card-solid: #0A0A18;
+            --bg-input: #0E0E20;
+            --border: #1A1A3A;
+            --text-primary: #E0E0F0;
+            --text-secondary: #6666AA;
+            --text-muted: #333366;
+            --accent-1: #7B2FBE;
+            --accent-2: #C41E7A;
+            --accent-3: #29B6F6;
+            --accent-gradient: linear-gradient(135deg, #7B2FBE, #C41E7A, #29B6F6);
+            --accent-gradient-h: linear-gradient(90deg, #7B2FBE, #C41E7A);
+            --glow: rgba(123, 47, 190, 0.4);
+            --shadow: rgba(0,0,0,0.6);
+            --success: #4CAF50;
+            --error: #F44336;
+            --twitch: #7B2FFF;
+            --discord: #4752C4;
+        }
+
+        /* ===== Reset & Base ===== */
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.5s, color 0.3s;
+        }
+        a { color: var(--accent-2); text-decoration: none; transition: 0.2s; }
+        a:hover { opacity: 0.8; }
+
+        /* ===== Animated Background ===== */
+        #particles-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+        }
+        .bg-glow {
+            position: fixed; border-radius: 50%; filter: blur(120px);
+            pointer-events: none; z-index: 0;
+            animation: floatGlow 12s ease-in-out infinite alternate;
+        }
+        .bg-glow-1 { width: 600px; height: 600px; top: -200px; left: -100px; background: rgba(155,89,182,0.12); }
+        .bg-glow-2 { width: 500px; height: 500px; bottom: -200px; right: -100px; background: rgba(231,76,139,0.1); animation-delay: -4s; }
+        .bg-glow-3 { width: 400px; height: 400px; top: 40%; left: 50%; background: rgba(79,195,247,0.06); animation-delay: -8s; }
+        @keyframes floatGlow {
+            0% { transform: translate(0,0) scale(1); }
+            100% { transform: translate(60px, -40px) scale(1.15); }
+        }
+
+        /* ===== Navigation ===== */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: var(--bg-secondary); border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            padding: 0 2rem; height: 64px;
+            display: flex; align-items: center; justify-content: space-between;
+            transition: background 0.5s;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 12px; }
+        .nav-logo {
+            width: 36px; height: 36px; border-radius: 50%;
+            object-fit: cover; border: 2px solid var(--accent-1);
+        }
+        .nav-title {
+            font-size: 1.3rem; font-weight: 800;
+            background: var(--accent-gradient); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .nav-links { display: flex; gap: 6px; align-items: center; }
+        .nav-links a {
+            color: var(--text-secondary); padding: 8px 14px; border-radius: 8px;
+            font-size: 0.9rem; font-weight: 500; transition: 0.2s;
+        }
+        .nav-links a:hover { color: var(--text-primary); background: var(--bg-input); }
+        .nav-actions { display: flex; gap: 8px; align-items: center; }
+        .theme-btn {
+            background: var(--bg-input); border: 1px solid var(--border);
+            color: var(--text-secondary); padding: 6px 10px; border-radius: 8px;
+            cursor: pointer; font-size: 1rem; transition: 0.2s;
+        }
+        .theme-btn:hover { color: var(--text-primary); border-color: var(--accent-1); }
+
+        /* ===== Hero Section ===== */
+        .hero {
+            position: relative; z-index: 1;
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            padding: 100px 2rem 60px; text-align: center;
+        }
+        .hero-content { max-width: 800px; }
+        .hero-logo {
+            width: 150px; height: 150px; border-radius: 50%;
+            object-fit: cover; border: 3px solid var(--accent-1);
+            box-shadow: 0 0 40px var(--glow);
+            margin-bottom: 24px;
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 40px var(--glow); }
+            50% { box-shadow: 0 0 70px var(--glow), 0 0 100px rgba(231,76,139,0.15); }
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900;
+            background: var(--accent-gradient); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
+            margin-bottom: 8px; letter-spacing: -1px;
+        }
+        .hero h2 {
+            font-size: clamp(1rem, 2.5vw, 1.4rem); font-weight: 600;
+            color: var(--text-secondary); margin-bottom: 6px;
+        }
+        .hero .server-ip {
+            display: inline-block; background: var(--bg-card); border: 1px solid var(--border);
+            padding: 8px 20px; border-radius: 10px; font-size: 0.95rem;
+            color: var(--accent-3); font-weight: 600; margin-bottom: 30px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 28px; border-radius: 12px; font-size: 1rem;
+            font-weight: 700; cursor: pointer; border: none; transition: 0.3s;
+            font-family: var(--font);
+        }
+        .btn-primary {
+            background: var(--accent-gradient-h); color: #fff;
+            box-shadow: 0 4px 20px var(--glow);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--glow); }
+        .btn-secondary {
+            background: var(--bg-card); color: var(--text-primary);
+            border: 1px solid var(--border); backdrop-filter: blur(10px);
+        }
+        .btn-secondary:hover { border-color: var(--accent-1); transform: translateY(-2px); }
+        .btn-twitch { background: var(--twitch); color: #fff; }
+        .btn-twitch:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-discord { background: var(--discord); color: #fff; }
+        .btn-discord:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* ===== Section Base ===== */
+        .section {
+            position: relative; z-index: 1;
+            padding: 80px 2rem; max-width: 1200px; margin: 0 auto;
+        }
+        .section-title {
+            font-size: 2rem; font-weight: 800; text-align: center;
+            margin-bottom: 12px;
+            background: var(--accent-gradient); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .section-sub {
+            text-align: center; color: var(--text-secondary);
+            font-size: 1rem; margin-bottom: 50px;
+        }
+
+        /* ===== Cards Grid ===== */
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 24px; transition: 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        .card:hover { border-color: var(--accent-1); transform: translateY(-4px);
+            box-shadow: 0 8px 30px var(--shadow); }
+        .card-icon { font-size: 2rem; margin-bottom: 12px; }
+        .card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
+        .card p { color: var(--text-secondary); font-size: 0.9rem; }
+
+        /* ===== News ===== */
+        .news-item {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 24px; margin-bottom: 16px;
+            transition: 0.3s; backdrop-filter: blur(10px);
+        }
+        .news-item:hover { border-color: var(--accent-1); }
+        .news-date { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; }
+        .news-item h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; }
+        .news-item p { color: var(--text-secondary); font-size: 0.9rem; }
+        .news-tag {
+            display: inline-block; padding: 3px 10px; border-radius: 6px;
+            font-size: 0.75rem; font-weight: 600; margin-bottom: 8px;
+        }
+        .tag-update { background: rgba(155,89,182,0.2); color: var(--accent-1); }
+        .tag-event { background: rgba(231,76,139,0.2); color: var(--accent-2); }
+        .tag-server { background: rgba(79,195,247,0.2); color: var(--accent-3); }
+
+        /* ===== Twitch ===== */
+        .twitch-container {
+            display: grid; grid-template-columns: 1fr 350px; gap: 20px;
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 16px; overflow: hidden;
+        }
+        .twitch-player { aspect-ratio: 16/9; background: #000; }
+        .twitch-player iframe { width: 100%; height: 100%; border: none; }
+        .twitch-chat { background: var(--bg-card-solid); }
+        .twitch-chat iframe { width: 100%; height: 100%; border: none; min-height: 500px; }
+        .twitch-header {
+            padding: 16px; display: flex; align-items: center; gap: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+        .twitch-dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: var(--text-muted); animation: pulse 2s infinite;
+        }
+        .twitch-dot.live { background: #FF0050; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; } 50% { opacity: 0.5; }
+        }
+
+        /* ===== Shop ===== */
+        .shop-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+        .shop-item {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 20px; text-align: center;
+            transition: 0.3s; backdrop-filter: blur(10px);
+        }
+        .shop-item:hover { border-color: var(--accent-2); transform: translateY(-4px);
+            box-shadow: 0 8px 30px var(--shadow); }
+        .shop-icon { font-size: 3rem; margin-bottom: 10px; }
+        .shop-item h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+        .shop-item .price {
+            font-size: 1.3rem; font-weight: 800; margin: 8px 0;
+            background: var(--accent-gradient-h); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .btn-buy {
+            background: var(--accent-gradient-h); color: #fff;
+            padding: 10px 24px; border-radius: 10px; font-size: 0.9rem;
+            font-weight: 700; cursor: pointer; border: none; width: 100%;
+            font-family: var(--font); transition: 0.3s;
+        }
+        .btn-buy:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* ===== Chat ===== */
+        .chat-container {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 16px; overflow: hidden; max-width: 700px;
+            margin: 0 auto; backdrop-filter: blur(10px);
+        }
+        .chat-header {
+            padding: 16px 20px; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .chat-header h3 { font-size: 1rem; font-weight: 700; }
+        .chat-status { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-muted); }
+        .chat-status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--error); }
+        .chat-status-dot.connected { background: var(--success); }
+        .chat-messages {
+            height: 400px; overflow-y: auto; padding: 16px;
+            display: flex; flex-direction: column; gap: 4px;
+        }
+        .chat-msg {
+            padding: 6px 12px; border-radius: 8px; font-size: 0.88rem;
+            transition: background 0.2s;
+        }
+        .chat-msg:hover { background: var(--bg-input); }
+        .chat-msg .author { font-weight: 700; margin-right: 8px; }
+        .chat-msg .author.minecraft { color: var(--success); }
+        .chat-msg .author.web { color: var(--accent-3); }
+        .chat-msg .time { font-size: 0.75rem; color: var(--text-muted); margin-left: 8px; }
+        .chat-input-area {
+            padding: 12px 16px; border-top: 1px solid var(--border);
+            display: flex; gap: 10px;
+        }
+        .chat-input {
+            flex: 1; background: var(--bg-input); border: 1px solid var(--border);
+            border-radius: 10px; padding: 10px 14px; color: var(--text-primary);
+            font-size: 0.9rem; font-family: var(--font); outline: none; transition: 0.2s;
+        }
+        .chat-input:focus { border-color: var(--accent-1); }
+        .chat-send {
+            background: var(--accent-gradient-h); color: #fff; border: none;
+            border-radius: 10px; padding: 10px 18px; cursor: pointer;
+            font-weight: 700; font-family: var(--font); transition: 0.2s;
+        }
+        .chat-send:hover { opacity: 0.85; }
+
+        /* ===== Download ===== */
+        .download-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+        .download-card {
+            background: var(--bg-card); border: 1px solid var(--border);
+            border-radius: 16px; padding: 24px; text-align: center;
+            transition: 0.3s; backdrop-filter: blur(10px);
+        }
+        .download-card:hover { border-color: var(--accent-1); transform: translateY(-4px); }
+        .download-card .os-icon { font-size: 2.5rem; margin-bottom: 12px; }
+        .download-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 4px; }
+        .download-card p { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 14px; }
+
+        /* ===== Footer ===== */
+        .footer {
+            position: relative; z-index: 1;
+            border-top: 1px solid var(--border); padding: 40px 2rem;
+            text-align: center; color: var(--text-muted); font-size: 0.85rem;
+        }
+        .footer-links { display: flex; gap: 20px; justify-content: center; margin-bottom: 16px; }
+        .footer-links a { color: var(--text-secondary); font-size: 0.9rem; }
+
+        /* ===== Scrollbar ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-1); }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .navbar { padding: 0 1rem; }
+            .nav-links { display: none; }
+            .twitch-container { grid-template-columns: 1fr; }
+            .twitch-chat { min-height: 300px; }
+            .section { padding: 50px 1rem; }
+            .hero { padding: 80px 1rem 40px; }
+            .hero-btns { flex-direction: column; align-items: center; }
+        }
+
+        /* ===== Mobile Menu ===== */
+        .mobile-menu-btn {
+            display: none; background: none; border: none; color: var(--text-primary);
+            font-size: 1.5rem; cursor: pointer; padding: 4px;
+        }
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: block; }
+        }
+
+        /* ===== Smooth Section Reveal ===== */
+        .reveal {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ===== Version Badge ===== */
+        .version-badge {
+            display: inline-block; background: var(--bg-card);
+            border: 1px solid var(--border); padding: 4px 12px;
+            border-radius: 20px; font-size: 0.8rem; color: var(--accent-2);
+            font-weight: 600; margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <canvas id="particles-canvas"></canvas>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="https://i.ibb.co/LXNzzVGq/Chat-GPT-Image-8-2026-01-44-16.png" alt="MinilLend" class="nav-logo">
+            <span class="nav-title">MinilLend</span>
+        </div>
+        <div class="nav-links">
+            <a href="#news">Новости</a>
+            <a href="#stream">Стрим</a>
+            <a href="#shop">Магазин</a>
+            <a href="#chat">Чат</a>
+            <a href="#download">Скачать</a>
+        </div>
+        <div class="nav-actions">
+            <a href="https://discord.gg/FVDpwBUkC9" target="_blank" class="btn btn-discord" style="padding:6px 14px;font-size:0.85rem;">
+                Discord
+            </a>
+            <a href="https://www.donationalerts.com/r/miniksstudios" target="_blank" class="btn btn-secondary" style="padding:6px 14px;font-size:0.85rem;">
+                Поддержать
+            </a>
+            <button class="theme-btn" onclick="cycleTheme()" title="Сменить тему">🎨</button>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <img src="https://i.ibb.co/LXNzzVGq/Chat-GPT-Image-8-2026-01-44-16.png" alt="MinilLend" class="hero-logo">
+            <div class="version-badge">v2.0.0 — NeoForge 21.1.242</div>
+            <h1>MinilLend</h1>
+            <h2>All of Create Aeronautics v2.2</h2>
+            <div class="server-ip">89.248.236.147:27300</div>
+            <div class="hero-btns">
+                <a href="#download" class="btn btn-primary">⬇ Скачать лаунчер</a>
+                <a href="https://twitch.tv/minilstudio" target="_blank" class="btn btn-twitch">📺 Twitch</a>
+                <a href="https://discord.gg/FVDpwBUkC9" target="_blank" class="btn btn-discord">💬 Discord</a>
+                <a href="https://www.donationalerts.com/r/miniksstudios" target="_blank" class="btn btn-secondary">❤ Поддержать</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- News -->
+    <section class="section reveal" id="news">
+        <h2 class="section-title">Новости</h2>
+        <p class="section-sub">Последние обновления и события</p>
+
+        <div class="news-item">
+            <span class="news-tag tag-update">Обновление</span>
+            <div class="news-date">8 августа 2026</div>
+            <h3>MinilLend Launcher v2.0.0 — Полное обновление</h3>
+            <p>Новый дизайн с фиолетово-розовой темой, встроенный Twitch плеер, управление скинами и плащами,
+               экран загрузки с анимацией, скруглённые углы окон, скрытый запуск командной строки.
+               Лаунчер теперь выглядит современно и работает ещё лучше!</p>
+        </div>
+
+        <div class="news-item">
+            <span class="news-tag tag-server">Сервер</span>
+            <div class="news-date">5 августа 2026</div>
+            <h3>Обновление сборки All of Create Aeronautics v2.2</h3>
+            <p>Добавлены новые аддоны для Create, исправлены баги с рецептами,
+               оптимизирована работа сервера. Обновите модпак через лаунчер!</p>
+        </div>
+
+        <div class="news-item">
+            <span class="news-tag tag-event">Ивент</span>
+            <div class="news-date">1 августа 2026</div>
+            <h3>Строительный конкурс на сервере</h3>
+            <p>Тема: «Фабрика будущего». Стройте невероятные механизмы с Create и выигрывайте
+               алмазы и редкие предметы! Подробности в Discord.</p>
+        </div>
+    </section>
+
+    <!-- Stream -->
+    <section class="section reveal" id="stream">
+        <h2 class="section-title">Стрим</h2>
+        <p class="section-sub">Смотри игру в реальном времени</p>
+        <div class="twitch-container">
+            <div>
+                <div class="twitch-header">
+                    <div class="twitch-dot" id="twitch-status-dot"></div>
+                    <span style="font-weight:700;">minilstudio</span>
+                    <span id="twitch-status-text" style="color:var(--text-muted);font-size:0.85rem;">загрузка...</span>
+                </div>
+                <div class="twitch-player">
+                    <iframe
+                        src="https://player.twitch.tv/?channel=minilstudio&parent=miniksstudios.github.io&muted=true"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+            <div class="twitch-chat">
+                <iframe
+                    src="https://www.twitch.tv/embed/minilstudio/chat?parent=miniksstudios.github.io&darkpopout">
+                </iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shop -->
+    <section class="section reveal" id="shop">
+        <h2 class="section-title">Магазин</h2>
+        <p class="section-sub">Покупай предметы для игры на сервере</p>
+
+        <div class="shop-grid">
+            <div class="shop-item">
+                <div class="shop-icon">💎</div>
+                <h3>Алмазы x64</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Стак алмазов на сервер</p>
+                <div class="price">99 ₽</div>
+                <button class="btn-buy" onclick="buyItem('diamonds_64', 99)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">⚙️</div>
+                <h3>Механизмы Create</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Набор базовых механизмов</p>
+                <div class="price">149 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_basic', 149)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">🗡️</div>
+                <h3>Незеритовый набор</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Полный набор незерита</p>
+                <div class="price">199 ₽</div>
+                <button class="btn-buy" onclick="buyItem('netherite_set', 199)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">🧪</div>
+                <h3>Зелья x32</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Набор зелий силы, скорости, регенерации</p>
+                <div class="price">79 ₽</div>
+                <button class="btn-buy" onclick="buyItem('potions_32', 79)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">🏗️</div>
+                <h3>Ресурсы для стройки</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Камень, дерево, стекло и др.</p>
+                <div class="price">129 ₽</div>
+                <button class="btn-buy" onclick="buyItem('build_resources', 129)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">🌟</div>
+                <h3>VIP статус</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Цветной ник, приватный дом, кит</p>
+                <div class="price">299 ₽</div>
+                <button class="btn-buy" onclick="buyItem('vip_status', 299)">Купить</button>
+            </div>
+        </div>
+
+        <p style="text-align:center;color:var(--text-muted);font-size:0.8rem;margin-top:20px;">
+            Оплата через YooKassa. Предметы выдаются автоматически после оплаты.
+        </p>
+    </section>
+
+    <!-- Chat -->
+    <section class="section reveal" id="chat">
+        <h2 class="section-title">Чат сервера</h2>
+        <p class="section-sub">Общайся с игроками прямо с сайта</p>
+
+        <div class="chat-container">
+            <div class="chat-header">
+                <h3>💬 Игровой чат</h3>
+                <div class="chat-status">
+                    <div class="chat-status-dot" id="chat-status-dot"></div>
+                    <span id="chat-status-text">Отключён</span>
+                </div>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <div class="chat-msg" style="color:var(--text-muted);font-style:italic;">
+                    Подключение к серверу чата...
+                </div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" id="chat-input"
+                       placeholder="Введите никнейм и сообщение..."
+                       maxlength="200">
+                <button class="chat-send" onclick="sendChatMessage()">→</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download -->
+    <section class="section reveal" id="download">
+        <h2 class="section-title">Скачать</h2>
+        <p class="section-sub">Выбери свою операционную систему</p>
+
+        <div class="download-cards">
+            <div class="download-card">
+                <div class="os-icon">🪟</div>
+                <h3>Windows</h3>
+                <p>x64 • Windows 10/11</p>
+                <a href="https://github.com/miniksstudios/minillend-launcher/releases/latest/download/MinilLend.exe"
+                   class="btn btn-primary" style="width:100%;justify-content:center;">
+                    ⬇ Скачать .exe
+                </a>
+            </div>
+            <div class="download-card">
+                <div class="os-icon">🐧</div>
+                <h3>Linux</h3>
+                <p>x64 • Ubuntu / Fedora / Arch</p>
+                <a href="https://github.com/miniksstudios/minillend-launcher/releases/latest"
+                   class="btn btn-secondary" style="width:100%;justify-content:center;">
+                    ⬇ Скачать
+                </a>
+            </div>
+            <div class="download-card">
+                <div class="os-icon">🍎</div>
+                <h3>macOS</h3>
+                <p>x64 / ARM64 • macOS 12+</p>
+                <a href="https://github.com/miniksstudios/minillend-launcher/releases/latest"
+                   class="btn btn-secondary" style="width:100%;justify-content:center;">
+                    ⬇ Скачать
+                </a>
+            </div>
+        </div>
+
+        <div style="text-align:center;margin-top:30px;">
+            <a href="https://github.com/miniksstudios/minillend-launcher/releases" target="_blank"
+               style="color:var(--text-secondary);font-size:0.9rem;">
+                Все релизы на GitHub →
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="https://twitch.tv/minilstudio" target="_blank">Twitch</a>
+            <a href="https://discord.gg/FVDpwBUkC9" target="_blank">Discord</a>
+            <a href="https://github.com/miniksstudios/minillend-launcher" target="_blank">GitHub</a>
+            <a href="https://www.donationalerts.com/r/miniksstudios" target="_blank">DonationAlerts</a>
+        </div>
+        <p>© 2026 MinilLend. Не является продуктом Mojang AB.</p>
+    </footer>
+
+    <script>
+        // ===== Theme =====
+        const themes = ['dark', 'light', 'midnight'];
+        let currentTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', currentTheme);
+
+        function cycleTheme() {
+            const idx = (themes.indexOf(currentTheme) + 1) % themes.length;
+            currentTheme = themes[idx];
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            localStorage.setItem('theme', currentTheme);
+        }
+
+        // ===== Particles =====
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        function createParticles() {
+            particles = [];
+            for (let i = 0; i < 80; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2.5 + 0.5,
+                    speedX: (Math.random() - 0.5) * 0.3,
+                    speedY: (Math.random() - 0.5) * 0.3,
+                    opacity: Math.random() * 0.5 + 0.1,
+                    color: Math.random() > 0.5
+                        ? `rgba(155,89,182,${Math.random()*0.5+0.1})`
+                        : `rgba(231,76,139,${Math.random()*0.3+0.1})`
+                });
+            }
+        }
+        createParticles();
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.speedX;
+                p.y += p.speedY;
+                if (p.x < 0) p.x = canvas.width;
+                if (p.x > canvas.width) p.x = 0;
+                if (p.y < 0) p.y = canvas.height;
+                if (p.y > canvas.height) p.y = 0;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+            });
+
+            // Draw lines between nearby particles
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(155,89,182,${0.08 * (1 - dist/120)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // ===== Scroll Reveal =====
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // ===== Twitch Status =====
+        async function checkTwitchStatus() {
+            try {
+                const resp = await fetch('https://decapi.me/twitch/status/minilstudio');
+                const text = await resp.text();
+                const dot = document.getElementById('twitch-status-dot');
+                const statusText = document.getElementById('twitch-status-text');
+                if (text.toLowerCase().includes('offline')) {
+                    dot.classList.remove('live');
+                    statusText.textContent = 'OFFLINE';
+                } else {
+                    dot.classList.add('live');
+                    statusText.textContent = 'LIVE — ' + text.trim().substring(0, 60);
+                }
+            } catch(e) {}
+        }
+        checkTwitchStatus();
+        setInterval(checkTwitchStatus, 60000);
+
+        // ===== Chat =====
+        const chatMessages = document.getElementById('chat-messages');
+        const chatInput = document.getElementById('chat-input');
+        const chatStatusDot = document.getElementById('chat-status-dot');
+        const chatStatusText = document.getElementById('chat-status-text');
+        let ws = null;
+
+        function connectChat() {
+            // Connect to the chat WebSocket server
+            // Replace with your actual server address
+            try {
+                ws = new WebSocket('ws://89.248.236.147:8080/chat');
+
+                ws.onopen = () => {
+                    chatStatusDot.classList.add('connected');
+                    chatStatusText.textContent = 'Подключено';
+                    addChatMessage('Система', 'Подключено к чату сервера', 'system');
+                };
+
+                ws.onmessage = (event) => {
+                    try {
+                        const data = JSON.parse(event.data);
+                        addChatMessage(data.author, data.message, data.source || 'minecraft');
+                    } catch(e) {
+                        addChatMessage('Сервер', event.data, 'minecraft');
+                    }
+                };
+
+                ws.onclose = () => {
+                    chatStatusDot.classList.remove('connected');
+                    chatStatusText.textContent = 'Отключено';
+                    setTimeout(connectChat, 5000);
+                };
+
+                ws.onerror = () => {
+                    chatStatusDot.classList.remove('connected');
+                    chatStatusText.textContent = 'Ошибка';
+                };
+            } catch(e) {
+                chatStatusText.textContent = 'Нет соединения';
+                setTimeout(connectChat, 10000);
+            }
+        }
+        connectChat();
+
+        function addChatMessage(author, message, source) {
+            const div = document.createElement('div');
+            div.className = 'chat-msg';
+            const authorClass = source === 'web' ? 'web' : 'minecraft';
+            const time = new Date().toLocaleTimeString('ru-RU', {hour:'2-digit',minute:'2-digit'});
+            div.innerHTML = `<span class="author ${authorClass}">${escapeHtml(author)}</span>${escapeHtml(message)}<span class="time">${time}</span>`;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            if (chatMessages.children.length > 200) chatMessages.removeChild(chatMessages.firstChild);
+        }
+
+        function sendChatMessage() {
+            const val = chatInput.value.trim();
+            if (!val) return;
+            // Format: "nickname: message"
+            const parts = val.split(':');
+            let author = 'Игрок', message = val;
+            if (parts.length >= 2) {
+                author = parts[0].trim();
+                message = parts.slice(1).join(':').trim();
+            }
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send(JSON.stringify({ author, message, source: 'web' }));
+            }
+            addChatMessage(author, message, 'web');
+            chatInput.value = '';
+        }
+
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') sendChatMessage();
+        });
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ===== Shop (YooKassa) =====
+        function buyItem(itemId, price) {
+            // YooKassa integration placeholder
+            // In production, this would create a payment via your backend
+            const nickname = prompt('Введите ваш никнейм в Minecraft:');
+            if (!nickname) return;
+
+            // Redirect to YooKassa payment page
+            // Replace URL with your actual backend endpoint
+            const paymentUrl = `https://minillend.pay/create?item=${itemId}&price=${price}&nick=${encodeURIComponent(nickname)}`;
+
+            alert(`Оплата "${itemId}" за ${price}₽\n\nДля реальной оплаты подключите YooKassa.\nНикнейм: ${nickname}`);
+
+            // In production:
+            // window.location.href = paymentUrl;
+        }
+
+        // ===== Mobile Menu =====
+        function toggleMobileMenu() {
+            const links = document.querySelector('.nav-links');
+            links.style.display = links.style.display === 'flex' ? 'none' : 'flex';
+            links.style.position = 'absolute';
+            links.style.top = '64px';
+            links.style.left = '0';
+            links.style.right = '0';
+            links.style.background = 'var(--bg-secondary)';
+            links.style.flexDirection = 'column';
+            links.style.padding = '16px';
+            links.style.borderBottom = '1px solid var(--border)';
+        }
+    </script>
+</body>
+</html>

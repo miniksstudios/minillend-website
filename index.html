@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MinilLend — Minecraft Launcher & Server</title>
     <meta name="description" content="MinilLend — кастомный Minecraft лаунчер для сборки All of Create Aeronautics v2.2">
-    <link rel="icon" href="https://i.ibb.co/LXNzzVGq/Chat-GPT-Image-8-2026-01-44-16.png" type="image/png">
+    <link rel="icon" href="https://i.ibb.co/xtqNz8wM/Chat-GPT-Image-8-2026-01-44-16.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         /* ===== CSS Variables & Themes ===== */
@@ -414,7 +414,7 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-brand">
-            <img src="https://i.ibb.co/LXNzzVGq/Chat-GPT-Image-8-2026-01-44-16.png" alt="MinilLend" class="nav-logo">
+            <img src="https://i.ibb.co/xtqNz8wM/Chat-GPT-Image-8-2026-01-44-16.png" alt="MinilLend" class="nav-logo">
             <span class="nav-title">MinilLend</span>
         </div>
         <div class="nav-links">
@@ -439,7 +439,7 @@
     <!-- Hero -->
     <section class="hero" id="hero">
         <div class="hero-content">
-            <img src="https://i.ibb.co/LXNzzVGq/Chat-GPT-Image-8-2026-01-44-16.png" alt="MinilLend" class="hero-logo">
+            <img src="https://i.ibb.co/xtqNz8wM/Chat-GPT-Image-8-2026-01-44-16.png" alt="MinilLend" class="hero-logo">
             <div class="version-badge">v2.0.0 — NeoForge 21.1.242</div>
             <h1>MinilLend</h1>
             <h2>All of Create Aeronautics v2.2</h2>
@@ -515,6 +515,129 @@
         <h2 class="section-title">Магазин</h2>
         <p class="section-sub">Покупай предметы для игры на сервере</p>
 
+        <!-- Create Mod Items -->
+        <h3 style="text-align:center;font-size:1.2rem;font-weight:700;margin-bottom:20px;color:var(--accent-2);">
+            ⚙️ Предметы Create
+        </h3>
+        <div class="shop-grid">
+            <div class="shop-item">
+                <div class="shop-icon">🔧</div>
+                <h3>Механическая рука</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Deployer — автоматически использует предметы</p>
+                <div class="price">49 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_deployer', 49)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">⚙️</div>
+                <h3>Шестерёнки (набор)</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Малые, средние и большие шестерёнки</p>
+                <div class="price">39 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_gears', 39)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">🌀</div>
+                <h3>Вращатель (Rotation Force)</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Механический двигатель + валы</p>
+                <div class="price">59 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_motor', 59)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">🏗️</div>
+                <h3>Механизм сборки</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Mechanical Crafter — авто-крафт</p>
+                <div class="price">69 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_crafter', 69)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">🚂</div>
+                <h3>Поезд + рельсы x64</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Локомотив, вагоны и рельсы</p>
+                <div class="price">149 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_train', 149)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">💧</div>
+                <h3>Помпа + трубы</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Механическая помпа и жидкостные трубы</p>
+                <div class="price">59 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_pump', 59)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">🔨</div>
+                <h3>Механический пресс</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Mechanical Press — прессование и крафт</p>
+                <div class="price">49 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_press', 49)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">⛏️</div>
+                <h3>Механическая бурильная машина</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Механизм для автоматической добычи</p>
+                <div class="price">79 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_drill', 79)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">🪜</div>
+                <h3>Подъёмник (Elevator)</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Механический подъёмник на верёвках</p>
+                <div class="price">59 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_elevator', 59)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">🌾</div>
+                <h3>Механическая ферма</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Harvester + Planter — автоферма</p>
+                <div class="price">89 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_farm', 89)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">🪨</div>
+                <h3>Дробилка (Crushing Wheel)</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Два больших колеса для дробления руд</p>
+                <div class="price">99 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_crusher', 99)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">📦</div>
+                <h3>Конвейерная лента x128</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Базовые и ускоренные конвейеры</p>
+                <div class="price">69 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_belts', 69)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">🔭</div>
+                <h3>Механизм зрения</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Content Observer + Stockpile Switch</p>
+                <div class="price">49 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_observer', 49)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">💨</div>
+                <h3>Пневматический двигатель</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Windmill Bearing + Sail x32</p>
+                <div class="price">79 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_windmill', 79)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">🧲</div>
+                <h3>Магнит + рельсы</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Магнитные рельсы и вагонетки</p>
+                <div class="price">69 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_magnet', 69)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">🌋</div>
+                <h3>Набор Create: Максимум</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Все механизмы Create в одном наборе</p>
+                <div class="price">499 ₽</div>
+                <button class="btn-buy" onclick="buyItem('create_full', 499)">Купить</button>
+            </div>
+        </div>
+
+        <!-- General Items -->
+        <h3 style="text-align:center;font-size:1.2rem;font-weight:700;margin:40px 0 20px;color:var(--accent-1);">
+            🎮 Игровые предметы
+        </h3>
         <div class="shop-grid">
             <div class="shop-item">
                 <div class="shop-icon">💎</div>
@@ -524,32 +647,25 @@
                 <button class="btn-buy" onclick="buyItem('diamonds_64', 99)">Купить</button>
             </div>
             <div class="shop-item">
-                <div class="shop-icon">⚙️</div>
-                <h3>Механизмы Create</h3>
-                <p style="color:var(--text-secondary);font-size:0.85rem;">Набор базовых механизмов</p>
-                <div class="price">149 ₽</div>
-                <button class="btn-buy" onclick="buyItem('create_basic', 149)">Купить</button>
-            </div>
-            <div class="shop-item">
                 <div class="shop-icon">🗡️</div>
                 <h3>Незеритовый набор</h3>
-                <p style="color:var(--text-secondary);font-size:0.85rem;">Полный набор незерита</p>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Полный набор незеритового снаряжения</p>
                 <div class="price">199 ₽</div>
                 <button class="btn-buy" onclick="buyItem('netherite_set', 199)">Купить</button>
             </div>
             <div class="shop-item">
                 <div class="shop-icon">🧪</div>
                 <h3>Зелья x32</h3>
-                <p style="color:var(--text-secondary);font-size:0.85rem;">Набор зелий силы, скорости, регенерации</p>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Сила, скорость, регенерация, ночь</p>
                 <div class="price">79 ₽</div>
                 <button class="btn-buy" onclick="buyItem('potions_32', 79)">Купить</button>
             </div>
             <div class="shop-item">
-                <div class="shop-icon">🏗️</div>
-                <h3>Ресурсы для стройки</h3>
-                <p style="color:var(--text-secondary);font-size:0.85rem;">Камень, дерево, стекло и др.</p>
+                <div class="shop-icon">🪨</div>
+                <h3>Строительные блоки x512</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Камень, кирпич, стекло, дерево</p>
                 <div class="price">129 ₽</div>
-                <button class="btn-buy" onclick="buyItem('build_resources', 129)">Купить</button>
+                <button class="btn-buy" onclick="buyItem('build_blocks', 129)">Купить</button>
             </div>
             <div class="shop-item">
                 <div class="shop-icon">🌟</div>
@@ -557,6 +673,13 @@
                 <p style="color:var(--text-secondary);font-size:0.85rem;">Цветной ник, приватный дом, кит</p>
                 <div class="price">299 ₽</div>
                 <button class="btn-buy" onclick="buyItem('vip_status', 299)">Купить</button>
+            </div>
+            <div class="shop-item">
+                <div class="shop-icon">🎒</div>
+                <h3>Стартовый набор</h3>
+                <p style="color:var(--text-secondary);font-size:0.85rem;">Инструменты, еда, броня для старта</p>
+                <div class="price">59 ₽</div>
+                <button class="btn-buy" onclick="buyItem('starter_kit', 59)">Купить</button>
             </div>
         </div>
 
@@ -602,8 +725,8 @@
                 <div class="os-icon">🪟</div>
                 <h3>Windows</h3>
                 <p>x64 • Windows 10/11</p>
-                <a href="https://github.com/miniksstudios/minillend-launcher/releases/latest/download/MinilLend.exe"
-                   class="btn btn-primary" style="width:100%;justify-content:center;">
+                <a href="https://github.com/miniksstudios/minillend-launcher/releases/download/v2.0.0/MinilLend.exe"
+                   class="btn btn-primary" style="width:100%;justify-content:center;" download>
                     ⬇ Скачать .exe
                 </a>
             </div>
@@ -611,18 +734,18 @@
                 <div class="os-icon">🐧</div>
                 <h3>Linux</h3>
                 <p>x64 • Ubuntu / Fedora / Arch</p>
-                <a href="https://github.com/miniksstudios/minillend-launcher/releases/latest"
-                   class="btn btn-secondary" style="width:100%;justify-content:center;">
-                    ⬇ Скачать
+                <a href="https://github.com/miniksstudios/minillend-launcher/releases/download/v2.0.0/MinilLend-linux-x64.sh"
+                   class="btn btn-secondary" style="width:100%;justify-content:center;" download>
+                    ⬇ Скачать .sh
                 </a>
             </div>
             <div class="download-card">
                 <div class="os-icon">🍎</div>
                 <h3>macOS</h3>
                 <p>x64 / ARM64 • macOS 12+</p>
-                <a href="https://github.com/miniksstudios/minillend-launcher/releases/latest"
-                   class="btn btn-secondary" style="width:100%;justify-content:center;">
-                    ⬇ Скачать
+                <a href="https://github.com/miniksstudios/minillend-launcher/releases/download/v2.0.0/MinilLend-osx-x64.sh"
+                   class="btn btn-secondary" style="width:100%;justify-content:center;" download>
+                    ⬇ Скачать .sh
                 </a>
             </div>
         </div>
